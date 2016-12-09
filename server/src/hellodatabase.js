@@ -1,15 +1,18 @@
 var MongoClient = require('mongodb').MongoClient;
-// Connect to database named 'facebook'.
-var url = 'mongodb://localhost:27017/facebook';
-MongoClient.connect(url, function(err, db) {
-  if (err) {
-    throw new Error("Could not connect to database: " + err);
-  } else {
-    console.log("Connected correctly to server.");
-    // This is where we will kick off other actions that use the database!
-    mongoExample(db);
+
+//connect to database named facebook
+var url  = 'mongodb://localhost:27017/facebook';
+MongoClient.connect(url,function(err,db){
+  if(err){
+    throw new Error("Could not connect to database :"+ err);
   }
+  else{
+    console.log(("Connected to server. "));
+      // perform other actions here since we are Connected
+      mongoExample(db);
+}
 });
+
 /**
  * Inserts a simple document into the 'helloworld'
  * document collection.
@@ -18,21 +21,24 @@ MongoClient.connect(url, function(err, db) {
  *   operation completes. We will pass back the new object's
  *   ID.
  */
-function insertExample(db, callback) {
-  // A document is just a JSON object, like in our mock database.
-  var exampleDocument = {
-    message: "Hello, world!"
+
+function insertExample(db,callback){
+    //A doc is just a JSON object, like in our mock db
+
+    var exampleDocument = {
+      message : "Hello , World!"
   };
-  // Insert the example document into collection 'helloworld'.
-  db.collection('helloworld').insertOne(exampleDocument, function(err, result) {
-    if (err) {
-      // Something bad happened, and the insertion failed.
-      throw err;
-    } else {
-      // Success!
-      console.log("Successfully updated database! The new object's ID is " + result.insertedId);
-      callback(result.insertedId);
-    }
+  //Insert the exampleDocument into collection helloworld
+  db.collection('helloworld').insertOne(exampleDocument,function(err,result){
+    if(err){
+      //shit hit the fan
+        throw err;
+     }
+  else{
+    //Success!
+    console.log("Successfully updated db! The new object's ID is "+ result.insertedId);
+    callback(result.insertedId);
+  }
   });
 }
 /**
@@ -43,38 +49,38 @@ function insertExample(db, callback) {
  * @param callback A callback function to run when the operation completes.
  *   It is called with the requested object.
  */
-function getHelloWorldDocument(db, id, callback) {
-  // Our database query: Find an object with this _id.
+function getHelloWorldDocument(db, id,callback)
+{
+  //our query find an object with this _id
   var query = {
     "_id": id
-  };
-  // findOne returns the first object that matches the query.
-  // Since _id must be unique, there will only be one object that
-  // matches.
-  db.collection('helloworld').findOne(query, function(err, doc) {
-    if (err) {
-      // Something bad happened.
-      throw err;
-    } else {
-      // Success! If we found the document, then doc contains
-      // the document. If we did not find the document, doc is
-      // null.
-      callback(doc);
-    }
-  });
+};
+  //returns the first object that matches query
+  //since _id must be uniquw, there will only be one match
+db.collection('helloworld').findOne(query, function(err,doc){
+  if(err){
+    //shit hit the fan
+    throw err;
+  }
+else{
+  //we probably found it else doc will be null
+    callback(doc);
 }
+});
+}
+
 /**
  * Add a new document to helloworld collection, read the document,
  * print the document.
  */
-function mongoExample(db) {
-  // Step 1: Insert the document.
-  insertExample(db, function(newId) {
-    // Step 2: Read the document.
-    getHelloWorldDocument(db, newId, function(doc) {
-      // Step 3: Print the document.
-      console.log("Wrote new object to helloworld collection:");
-      console.log(doc);
-    });
+function mongoExample(db){
+  //Step 1: Insert the document
+  insertExample(db,function(newId){
+    //Step 2 read the document
+    getHelloWorldDocument(db,newId, function(doc){
+    //Step 3: print the document
+    console.log("Wrote new project to helloworld collection");
+    console.log(doc);
   });
+});
 }
